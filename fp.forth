@@ -13,7 +13,7 @@ create mem MEM_SIZE allot 		\ create free memory pool
 					\  Friendly vector syntax: <| x y z |>
 : <| lv depth to lv  ;			\  Save reg val on stack, record depth
 : |> depth lv - vec swap to lv ;	\  Check change in depth and create vector, restore reg val
-: addr? 5000000 > ; 
+: addr? ( a -- a t|f ) dup pmem mem MEM_SIZE + within ; 
 
 \ Printing Words ( a -- )
 : .v	\ .v print as vector: <| 1 2 3 4 |> .v ==> 1 2 3 4 
@@ -30,7 +30,7 @@ create mem MEM_SIZE allot 		\ create free memory pool
 		cell+ dup @ .v cr 
 	loop drop ;
 : .l \ .l print as list (nested vectors) e.g. <| <| 1 2 <| 4 |> |> 5 |> .l ==> <| <| 1 2 <| 4 |> |> 5 |>
-	dup addr? if 
+	addr? if 
 		." <| " pvec swap		\ save last vector on the stack
 		to pvec pvec len 
 		begin dup while
@@ -40,7 +40,7 @@ create mem MEM_SIZE allot 		\ create free memory pool
 	else .
 	then ;
 : .lt  \ .l print as list with tabs (helper word)
-	dup addr? if 
+	addr? if 
 		pvec swap 
 		to pvec pvec len 
 		begin dup while
@@ -133,3 +133,4 @@ create mem MEM_SIZE allot 		\ create free memory pool
 reset 144 dup ints dup ' sqr all swap 2 vec trans 2 vec distl ' apndl all dup ' s3 all swap ' =2 all 2 vec trans ' and2 all ' or ins . cr
 \ Example: chinese multiplication table
 reset <| 9 ints 9 ints |> distl ' distr all dup ' *2 aall 2 vec trans ' trans all ' apndr aall ' fil<=2 all .t
+
