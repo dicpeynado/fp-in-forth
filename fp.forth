@@ -128,6 +128,7 @@ create mem MEM_SIZE allot 		\ create free memory pool
 	to fun to pvec 
 	<| pvec len 0 do pvec@+ dup fun execute 0= if drop then loop |> ; 
 : fil<=2 ['] <=2 filter ;
+: id ;
 
 \ Example: calculating square root of 144
 reset 144 dup ints dup ' sqr all swap 2 vec trans 2 vec distl ' apndl all dup ' s3 all swap ' =2 all 2 vec trans ' and2 all ' or ins . cr
